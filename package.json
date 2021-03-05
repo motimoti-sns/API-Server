@@ -1,0 +1,21 @@
+{
+  "name": "code-ac-hackathon-API",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/motimoti-sns/API-Server.git",
+  "author": "<hoshi03918@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
+    "eslint": "^7.21.0"
+  },
+  "scripts": {
+    "start": "ts-node index.ts"
+  },
+  "dependencies": {
+    "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3"
+  }
+}
