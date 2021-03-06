@@ -63,7 +63,7 @@ export class DBHandleService {
         }
       } else {
         try {
-          axios.post(`${blockChainAddr}/api/post`, {
+          await axios.post(`${blockChainAddr}/api/post`, {
             user_id: userId,
             previous_hash: hash('genesis'),
             hash: stashHash(hash('genesis'), hash(textBody)),
