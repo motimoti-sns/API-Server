@@ -1,8 +1,11 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 
 @Entity()
 export class PostTextRelation {
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @Column()
   user_id: number;
 

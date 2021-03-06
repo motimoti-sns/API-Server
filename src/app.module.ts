@@ -4,6 +4,9 @@ import { AppService } from './app.service';
 import { CatsController } from './cats/cats.controller';
 import { ApiController } from './api/api.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Text } from './text.entity';
+import { Post } from './userpost.entity';
+import { PostTextRelation } from './postTextRelation.entity';
 import * as dotenv from 'dotenv';
 dotenv.config()
 
@@ -16,7 +19,7 @@ dotenv.config()
       username: process.env.DB_USER_NAME,
       password: process.env.DB_USER_PASSWORD,
       database: process.env.DATA_BASE,
-      entities: [],
+      entities: [Post, Text, PostTextRelation],
       synchronize: true,
     }),
   ],
