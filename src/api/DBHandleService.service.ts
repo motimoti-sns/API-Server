@@ -45,9 +45,30 @@ export class DBHandleService {
       queryRunner.manager.insert(Text, {user_id: userId, body: textBody, index: index, timestamp: date});
       const insertedText =  await queryRunner.manager.findOne(Text, {user_id: userId, body: textBody, index: index, timestamp: date})
       queryRunner.manager.insert(PostTextRelation, {user_id: userId, text_id: insertedText.id, post_id: insertedPost.id});
-      const previousTransaction = await queryRunner.manager.findOne(TextTransactionRelation, {text_id: previousText.id});
+      const previousTransactionHash = await queryRunner.manager.findOne(TextTransactionRelation, {text_id: previousText.id});
       queryRunner.commitTransaction();
       succeeded = true
+      if (previousTransactionHash) {
+        try {
+          const prevTransactionBody = await axios.get(`${process.env.BLOCKCHAIN_ADDRESS}/api/transaction/${previousTransactionHash.transaction_hash}`);
+          const currentHash = stashHash(prevTransactionBody.data.hash, hash(textBody));
+          await axios.post(`${process.env.BLOCKCHAIN_ADDRESS}/api/post`, {
+            user_id: userId,
+            previous_hash: prevTransactionBody.data.hash,
+            hash: currentHash,
+            index: index,
+          });
+        } catch (e) {
+          console.log(e)
+        }
+      } else {
+        await axios.post(`${process.env.BLOCKCHAIN_ADDRESS}/api/post`, {
+          user_id: userId,
+          previous_hash: hash('genesis'),
+          hash: stashHash(hash('genesis'), hash(textBody)),
+          index: index,
+        });
+      }
     } catch (e) {
       console.log(e)
       queryRunner.rollbackTransaction();
