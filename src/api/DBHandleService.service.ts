@@ -9,6 +9,8 @@ import * as dotenv from 'dotenv';
 dotenv.config()
 import axios from 'axios';
 
+const blockChainAddr = process.env.BLOCKCHAIN_ADDRESS
+
 function stashHash (previousHash: string, currentHash: string) {
   return createHash('sha256')
     .update(previousHash + currentHash)
@@ -48,9 +50,9 @@ export class DBHandleService {
       succeeded = true
       if (previousTransactionHash) {
         try {
-          const prevTransactionBody = await axios.get(`${process.env.BLOCKCHAIN_ADDRESS}/api/transaction/${previousTransactionHash.transaction_hash}`);
+          const prevTransactionBody = await axios.get(`${blockChainAddr}/api/transaction/${previousTransactionHash.transaction_hash}`);
           const currentHash = stashHash(prevTransactionBody.data.hash, hash(textBody));
-          await axios.post(`${process.env.BLOCKCHAIN_ADDRESS}/api/post`, {
+          axios.post(`${blockChainAddr}/api/post`, {
             user_id: userId,
             previous_hash: prevTransactionBody.data.hash,
             hash: currentHash,
@@ -60,18 +62,22 @@ export class DBHandleService {
           console.log(e)
         }
       } else {
-        await axios.post(`${process.env.BLOCKCHAIN_ADDRESS}/api/post`, {
-          user_id: userId,
-          previous_hash: hash('genesis'),
-          hash: stashHash(hash('genesis'), hash(textBody)),
-          index: index,
-        });
+        try {
+          axios.post(`${blockChainAddr}/api/post`, {
+            user_id: userId,
+            previous_hash: hash('genesis'),
+            hash: stashHash(hash('genesis'), hash(textBody)),
+            index: index,
+          });
+        } catch (e) {
+          console.log(e)
+        }
       }
+      return succeeded
     } catch (e) {
       console.log(e)
       queryRunner.rollbackTransaction();
-    } finally {
-      return succeeded
     }
+    return succeeded
   }
 }
