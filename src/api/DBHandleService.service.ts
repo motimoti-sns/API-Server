@@ -14,7 +14,7 @@ export class DBHandleService {
     let succeeded: boolean;
     succeeded = false;
     try {
-      const date = new Date().toString()
+      const date = new Date().getTime().toString()
       queryRunner.manager.insert(Post, {user_id: userId, timestamp: date});
       const insertedPost = await queryRunner.manager.findOne(Post, {user_id: userId, timestamp: date});
       const previousText = await queryRunner.manager.findOne(Text, {user_id: userId}, {order: {id: 'DESC'}});

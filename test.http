@@ -3,6 +3,6 @@ POST http://localhost:5000/api/post
 Content-Type: application/json
 
 {
-    "user_id": 102,
+    "user_id": 105,
     "text": "testtesttest"
 }
