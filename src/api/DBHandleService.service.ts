@@ -3,6 +3,9 @@ import { Connection } from 'typeorm';
 import { Post } from '../userpost.entity';
 import { Text } from '../text.entity';
 import { PostTextRelation } from '../postTextRelation.entity';
+import * as dotenv from 'dotenv';
+dotenv.config()
+import axios from 'axios';
 
 @Injectable()
 export class DBHandleService {
