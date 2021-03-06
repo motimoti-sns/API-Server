@@ -1,0 +1,1 @@
+# db内に"data"ディレクトリを作って、docker-compose buildすれば使えるよ
