@@ -3,9 +3,25 @@ import { Connection } from 'typeorm';
 import { Post } from '../entities/userpost.entity';
 import { Text } from '../entities/text.entity';
 import { PostTextRelation } from '../entities/postTextRelation.entity';
+import { TextTransactionRelation} from '../entities/textTransactionRelation.entity';
+import crypto from 'crypto';
 import * as dotenv from 'dotenv';
 dotenv.config()
 import axios from 'axios';
+
+function stashHash (previousHash: string, currentHash: string) {
+  return crypto
+    .createHash('sha256')
+    .update(previousHash + currentHash)
+    .digest('hex')
+}
+
+function hash (toHash: string) {
+  return crypto
+    .createHash('sha256')
+    .update(toHash)
+    .digest('hex')
+}
 
 @Injectable()
 export class DBHandleService {
@@ -28,7 +44,8 @@ export class DBHandleService {
       }
       queryRunner.manager.insert(Text, {user_id: userId, body: textBody, index: index, timestamp: date});
       const insertedText =  await queryRunner.manager.findOne(Text, {user_id: userId, body: textBody, index: index, timestamp: date})
-      queryRunner.manager.insert(PostTextRelation, {user_id: userId, text_id: insertedText.id, post_id: insertedPost.id})
+      queryRunner.manager.insert(PostTextRelation, {user_id: userId, text_id: insertedText.id, post_id: insertedPost.id});
+      const previousTransaction = await queryRunner.manager.findOne(TextTransactionRelation, {text_id: previousText.id});
       queryRunner.commitTransaction();
       succeeded = true
     } catch (e) {

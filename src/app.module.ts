@@ -20,7 +20,7 @@ dotenv.config()
       username: process.env.DB_USER_NAME,
       password: process.env.DB_USER_PASSWORD,
       database: process.env.DATA_BASE,
-      entities: [Post, Text, PostTextRelation],
+      entities: [Post, Text, PostTextRelation, TextTransactionRelation],
       synchronize: true,
     }),
   ],
