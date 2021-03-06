@@ -8,9 +8,9 @@
 
 ## 受け取るデータ
 
-```json
+```typescript
 {
-  "user_id": number,
-  "test": string
+  user_id: number;
+  test: string;
 }
 ```
