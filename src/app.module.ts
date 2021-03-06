@@ -5,9 +5,9 @@ import { CatsController } from './cats/cats.controller';
 import { ApiController } from './api/api.controller';
 import { DBHandleService } from './api/DBHandleService.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Text } from './text.entity';
-import { Post } from './userpost.entity';
-import { PostTextRelation } from './postTextRelation.entity';
+import { Text } from './entities/text.entity';
+import { Post } from './entities/userpost.entity';
+import { PostTextRelation } from './entities/postTextRelation.entity';
 import * as dotenv from 'dotenv';
 dotenv.config()
 

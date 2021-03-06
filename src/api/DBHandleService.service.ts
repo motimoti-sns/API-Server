@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Connection } from 'typeorm';
-import { Post } from '../userpost.entity';
-import { Text } from '../text.entity';
-import { PostTextRelation } from '../postTextRelation.entity';
+import { Post } from '../entities/userpost.entity';
+import { Text } from '../entities/text.entity';
+import { PostTextRelation } from '../entities/postTextRelation.entity';
 import * as dotenv from 'dotenv';
 dotenv.config()
 import axios from 'axios';
