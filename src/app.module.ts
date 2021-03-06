@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatsController } from './cats/cats.controller';
 import { ApiController } from './api/api.controller';
+import { DBHandleService } from './api/DBHandleService.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Text } from './text.entity';
 import { Post } from './userpost.entity';
@@ -24,6 +25,6 @@ dotenv.config()
     }),
   ],
   controllers: [AppController, CatsController, ApiController],
-  providers: [AppService],
+  providers: [AppService, DBHandleService],
 })
 export class AppModule {}
