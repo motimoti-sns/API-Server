@@ -9,6 +9,7 @@ import { Text } from './entities/text.entity';
 import { Post } from './entities/userpost.entity';
 import { PostTextRelation } from './entities/postTextRelation.entity';
 import * as dotenv from 'dotenv';
+import { TextTransactionRelation } from './entities/textTransactionRelation.entity';
 dotenv.config()
 
 @Module({

@@ -27,6 +27,7 @@
     "@nestjs/swagger": "^4.7.15",
     "@nestjs/typeorm": "^7.1.5",
     "axios": "^0.21.1",
+    "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
     "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
