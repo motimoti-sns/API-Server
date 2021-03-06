@@ -9,7 +9,7 @@ export class ApiController {
 
   @Post('/post')
   async createPost(@Body() body: UserPost) {
-    const result = await this.handleService.insert(body.user_id, body.text)
+    const result = await this.handleService.insertPost(body.user_id, body.text)
     let msg: string;
     if (result) {
       msg = 'success'
