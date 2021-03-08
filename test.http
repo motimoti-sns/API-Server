@@ -6,3 +6,6 @@ Content-Type: application/json
     "user_id": 105,
     "text": "testtesttest"
 }
+
+###
+GET http://localhost:5000/api/post

@@ -42,15 +42,26 @@ export class DBHandleService {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect()
     const result: Array<{
-      userId: number,
-      postId: number,
-      textBody: string,
+      user_id: number,
+      post_id: number,
+      text_body: string,
       timestamp: string,
     }> = []
     const posts = await queryRunner.manager.find(Post, {is_deleted: false});
     for (const post of posts) {
-      result
+      try {
+        const textBody = await (await queryRunner.manager.findOne(Text, {id: post.text_id})).body;
+        result.push({
+          user_id: post.user_id,
+          post_id: post.id,
+          text_body: textBody,
+          timestamp: post.timestamp,
+        })
+      } catch (e) {
+        console.error(e)
+      }
     }
+    return result
   }
 
   async transactionInsert (transactionHash: string, textId: number, index: number): Promise<string> {

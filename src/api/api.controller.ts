@@ -19,6 +19,12 @@ export class ApiController {
     return msg
   }
 
+  @Get('/post')
+  async getPosts() {
+    const result = await this.handleService.selectPosts();
+    return result
+  }
+
   /**
    * 将来的にはブロックチェーンのサーバーのみがアクセス可能になるようにする
    */
