@@ -168,28 +168,22 @@ export class DBHandleService {
   async validateHashChain (userId: number) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
-    await queryRunner.startTransaction()
     try {
       const texts = await queryRunner.manager.find(Text, {order: {index: 'ASC'}, where: {user_id: userId}});
-      const hashesInBlockChain: Array<string> = [];
-      const hashes: Array<string> = [];
       let currentHash: string;
       currentHash = hash('genesis');
       for (const text of texts) {
         const rel = await queryRunner.manager.findOne(TextTransactionRelation, {where: {text_id: text.id}});
-        const hashInBlockChain = await axios.get(`${blockChainAddr}/api/transaction/${rel.transaction_hash}`)
-        hashesInBlockChain.push(hashInBlockChain.data.hash)
+        const hashInBlockChain = await axios.get(`${blockChainAddr}/api/transaction/${rel.transaction_hash}`);
         currentHash = stackHash(currentHash, hash(text.body))
-        hashes.push(currentHash);
-      }
-      for (const index in hashes) {
-        if (hashes[index] !== hashesInBlockChain[index]) {
-          await queryRunner.commitTransaction();
+        console.log('s: ', currentHash);
+        console.log('b: ', hashInBlockChain.data.hash)
+        if (currentHash !== hashInBlockChain.data.hash) {
+          await queryRunner.release();
           return 'invalid'
         }
       }
     } catch (e) {
-      await queryRunner.rollbackTransaction();
       console.error(e);
     }
     await queryRunner.release();
@@ -201,14 +195,14 @@ export class DBHandleService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      queryRunner.manager.insert(TextTransactionRelation, {text_id: textId, transaction_hash: transactionHash, index: index});
-      queryRunner.commitTransaction();
-      queryRunner.release();
+      await queryRunner.manager.insert(TextTransactionRelation, {text_id: textId, transaction_hash: transactionHash, index: index});
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
       return 'success'
     } catch (e) {
       console.error(e)
-      queryRunner.rollbackTransaction();
-      queryRunner.release();
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
       return 'failed'
     }
   }
