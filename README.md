@@ -30,3 +30,29 @@
   }
 ]
 ```
+
+# 投稿更新
+|　URL　| HTTPメソッド | 受け取るデータ形式 | 返すデータ形式 | 返すエラー | 備考 |
+| ---- | ---- | ---- | ---- | ---- | ---- |
+|  /api/post  |  PUT  | JSON | なし | なし | なし |
+
+
+```typescript
+{
+    user_id: number,
+    post_id: number,
+    text: string,
+}
+```
+
+# 投稿削除
+|　URL　| HTTPメソッド | 受け取るデータ形式 | 返すデータ形式 | 返すエラー | 備考 |
+| ---- | ---- | ---- | ---- | ---- | ---- |
+|  /api/post  | 　DELETE  | JSON | なし | なし | なし |
+
+```typescript
+{
+    post_id: number,
+}
+```
+
