@@ -57,6 +57,7 @@ export class DBHandleService {
             previous_hash: prevTransactionBody.data.hash,
             hash: currentHash,
             index: index,
+            text_id: insertedText.id
           });
         } catch (e) {
           console.error('err: ', e)
