@@ -6,6 +6,7 @@ import { PostTextRelation } from '../entities/postTextRelation.entity';
 import { TextTransactionRelation} from '../entities/textTransactionRelation.entity';
 import { Users } from '../entities/users.entity';
 import { createHashChain } from './BlockChainFuncs';
+import  md5 from 'md5';
 @Injectable()
 export class DBHandleService {
   constructor(private connection: Connection) {}
@@ -17,7 +18,8 @@ export class DBHandleService {
     let succeeded: boolean;
     succeeded = false;
     try {
-      await queryRunner.manager.insert(Users, {name: name, email: email, password: password});
+      const encryptedPassword = md5(password)
+      await queryRunner.manager.insert(Users, {name: name, email: email, password: encryptedPassword});
       await queryRunner.commitTransaction();
       succeeded = true
       await queryRunner.release();
