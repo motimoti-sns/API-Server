@@ -45,10 +45,10 @@ export class DBHandleService {
       queryRunner.manager.insert(Text, {user_id: userId, body: textBody, index: index, timestamp: date});
       const insertedText =  await queryRunner.manager.findOne(Text, {user_id: userId, body: textBody, index: index, timestamp: date})
       queryRunner.manager.insert(PostTextRelation, {user_id: userId, text_id: insertedText.id, post_id: insertedPost.id});
-      const previousTransactionHash = await queryRunner.manager.findOne(TextTransactionRelation, {text_id: previousText.id});
       queryRunner.commitTransaction();
       succeeded = true
-      if (previousTransactionHash) {
+      if (previousText) {
+        const previousTransactionHash = await queryRunner.manager.findOne(TextTransactionRelation, {text_id: previousText.id});
         try {
           const prevTransactionBody = await axios.get(`${blockChainAddr}/api/transaction/${previousTransactionHash.transaction_hash}`);
           const currentHash = stashHash(prevTransactionBody.data.hash, hash(textBody));
@@ -59,7 +59,7 @@ export class DBHandleService {
             index: index,
           });
         } catch (e) {
-          console.log(e)
+          console.error('err: ', e)
         }
       } else {
         try {
@@ -71,7 +71,7 @@ export class DBHandleService {
             text_id: insertedText.id
           });
         } catch (e) {
-          console.log(e)
+          console.error(e)
         }
       }
       return succeeded
