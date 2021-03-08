@@ -8,6 +8,9 @@ export class Post {
   @Column()
   user_id: number;
 
+  @Column()
+  text_id: number;
+
   @Column({default: false})
   is_deleted: boolean;
 

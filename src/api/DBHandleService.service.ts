@@ -16,8 +16,6 @@ export class DBHandleService {
     succeeded = false;
     try {
       const date = new Date().getTime().toString()
-      queryRunner.manager.insert(Post, {user_id: userId, timestamp: date});
-      const insertedPost = await queryRunner.manager.findOne(Post, {user_id: userId, timestamp: date});
       const previousText = await queryRunner.manager.findOne(Text, {user_id: userId}, {order: {id: 'DESC'}});
       let index: number;
       index = 0
@@ -26,6 +24,8 @@ export class DBHandleService {
       }
       queryRunner.manager.insert(Text, {user_id: userId, body: textBody, index: index, timestamp: date});
       const insertedText =  await queryRunner.manager.findOne(Text, {user_id: userId, body: textBody, index: index, timestamp: date})
+      queryRunner.manager.insert(Post, {user_id: userId, text_id: insertedText.id, timestamp: date});
+      const insertedPost = await queryRunner.manager.findOne(Post, {user_id: userId, timestamp: date});
       queryRunner.manager.insert(PostTextRelation, {user_id: userId, text_id: insertedText.id, post_id: insertedPost.id});
       queryRunner.commitTransaction();
       succeeded = true
@@ -38,7 +38,20 @@ export class DBHandleService {
     return succeeded
   }
 
-
+  async selectPosts () {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect()
+    const result: Array<{
+      userId: number,
+      postId: number,
+      textBody: string,
+      timestamp: string,
+    }> = []
+    const posts = await queryRunner.manager.find(Post, {is_deleted: false});
+    for (const post of posts) {
+      result
+    }
+  }
 
   async transactionInsert (transactionHash: string, textId: number, index: number): Promise<string> {
     const queryRunner = this.connection.createQueryRunner();
