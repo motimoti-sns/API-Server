@@ -30,6 +30,27 @@ export class DBHandleService {
     return succeeded
   }
 
+  async signup (email: string, password: string) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const user = await queryRunner.manager.findOne(Users, {email: email});
+      if (user) {
+        if (user.password === md5(password)) {
+          return 'success'
+        } else {
+          return 'invalid'
+        }
+      } else {
+        return 'invalid'
+      }
+    } catch (e) {
+      console.error(e);
+      return 'failed'
+    }
+  }
+
   async insertPost(userId: number, textBody: string) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();

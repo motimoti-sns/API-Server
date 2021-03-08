@@ -1,5 +1,12 @@
 import { Body, Controller, Post, Get, Put, Delete } from '@nestjs/common';
-import { UserPost, TextTransactionRelation, UserPostDiff, UserPost2Del, UserData } from './ApiProps';
+import {
+  UserPost,
+  TextTransactionRelation,
+  UserPostDiff,
+  UserPost2Del,
+  UserData,
+  LoginData
+} from './ApiProps';
 import { DBHandleService } from './DBHandleService.service';
 
 @Controller('api')
@@ -58,6 +65,13 @@ export class ApiController {
     } else {
       return 'failed'
     }
+  }
+
+  @Post('/login')
+  async login(@Body() body: LoginData) {
+    console.log('post: /login')
+    const result = await this.handleService.signup(body.email, body.password);
+    return result
   }
 
   /**

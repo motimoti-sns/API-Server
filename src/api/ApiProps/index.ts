@@ -10,6 +10,13 @@ export class UserData {
   password: string;
 }
 
+export class LoginData {
+  @ApiProperty()
+
+  email: string;
+  password: string;
+}
+
 export class UserPost {
   @ApiProperty()
   user_id: number;
