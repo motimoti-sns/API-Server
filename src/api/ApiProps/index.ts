@@ -10,5 +10,5 @@ export class TextTransactionRelation {
   @ApiProperty()
   text_id: number;
   index: number;
-  transaction_hash;
+  transaction_hash: string;
 }

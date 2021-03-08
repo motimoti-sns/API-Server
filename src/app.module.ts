@@ -8,8 +8,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Text } from './entities/text.entity';
 import { Post } from './entities/userpost.entity';
 import { PostTextRelation } from './entities/postTextRelation.entity';
-import * as dotenv from 'dotenv';
 import { TextTransactionRelation } from './entities/textTransactionRelation.entity';
+import * as dotenv from 'dotenv';
 dotenv.config()
 
 @Module({

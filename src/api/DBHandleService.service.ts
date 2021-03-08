@@ -68,6 +68,7 @@ export class DBHandleService {
             previous_hash: hash('genesis'),
             hash: stashHash(hash('genesis'), hash(textBody)),
             index: index,
+            text_id: insertedText.id
           });
         } catch (e) {
           console.log(e)
