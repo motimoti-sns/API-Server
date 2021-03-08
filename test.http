@@ -19,6 +19,14 @@ Content-Type: application/json
 
 {
     "user_id": 105,
-    "post_id": 275,
+    "post_id": 276,
     "text": "chinponya!!!"
+}
+
+###
+DELETE http://localhost:5000/api/post
+Content-Type: application/json
+
+{
+    "post_id": 276,
 }

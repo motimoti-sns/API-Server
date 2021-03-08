@@ -98,6 +98,23 @@ export class DBHandleService {
     return succeeded
   }
 
+  async deletePost(postId: number) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    let succeeded: boolean;
+    succeeded = false;
+    try {
+      queryRunner.manager.update(Post, postId, {is_deleted: true});
+      queryRunner.commitTransaction();
+      succeeded = true
+    } catch (e) {
+      console.error(e)
+      queryRunner.rollbackTransaction();
+    }
+    return succeeded
+  }
+
   async transactionInsert (transactionHash: string, textId: number, index: number): Promise<string> {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();

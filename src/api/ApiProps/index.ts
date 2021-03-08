@@ -13,6 +13,11 @@ export class UserPostDiff {
   text: string;
 }
 
+export class UserPost2Del {
+  @ApiProperty()
+  post_id: number;
+}
+
 export class TextTransactionRelation {
   @ApiProperty()
   text_id: number;
