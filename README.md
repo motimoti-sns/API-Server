@@ -56,3 +56,17 @@
 }
 ```
 
+
+# ユーザー登録
+|　URL　| HTTPメソッド | 受け取るデータ形式 | 返すデータ形式 | 返すエラー | 備考 |
+| ---- | ---- | ---- | ---- | ---- | ---- |
+|  /api/register  | 　POST  | JSON | なし | なし | なし |
+
+```typescript
+{
+    
+    email: string,
+    name: string,
+    password": string
+}
+```
