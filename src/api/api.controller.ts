@@ -9,6 +9,7 @@ export class ApiController {
 
   @Post('/post')
   async createPost(@Body() body: UserPost) {
+    console.log('post: /api/post')
     const result = await this.handleService.insertPost(body.user_id, body.text)
     let msg: string;
     if (result) {
@@ -21,6 +22,7 @@ export class ApiController {
 
   @Get('/post')
   async getPosts() {
+    console.log('get: /api/post')
     const result = await this.handleService.selectPosts();
     return result
   }
@@ -30,6 +32,7 @@ export class ApiController {
    */
   @Post('/relation/texthash')
   async insertRelation(@Body() body: TextTransactionRelation) {
+    console.log('post: /relation/texthash')
     const result = await this.handleService.transactionInsert(body.transaction_hash, body.text_id, body.index);
     return result
   }

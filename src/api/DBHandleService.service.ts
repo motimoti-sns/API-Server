@@ -30,11 +30,11 @@ export class DBHandleService {
       queryRunner.commitTransaction();
       succeeded = true
       await createHashChain(userId, textBody, insertedText.index, insertedText.id);
-      return succeeded
     } catch (e) {
       console.log(e)
       queryRunner.rollbackTransaction();
     }
+    queryRunner.release();
     return succeeded
   }
 
@@ -61,6 +61,7 @@ export class DBHandleService {
         console.error(e)
       }
     }
+    queryRunner.release();
     return result
   }
 
@@ -71,10 +72,12 @@ export class DBHandleService {
     try {
       queryRunner.manager.insert(TextTransactionRelation, {text_id: textId, transaction_hash: transactionHash, index: index});
       queryRunner.commitTransaction();
+      queryRunner.release();
       return 'success'
     } catch (e) {
       console.error(e)
       queryRunner.rollbackTransaction();
+      queryRunner.release();
       return 'failed'
     }
   }
