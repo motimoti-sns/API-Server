@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Req } from '@nestjs/common';
-import { UserPost } from './ApiProps';
+import { UserPost, TextTransactionRelation } from './ApiProps';
 import { DBHandleService } from './DBHandleService.service';
 
 @Controller('api')
@@ -17,5 +17,14 @@ export class ApiController {
       msg = 'failed'
     }
     return msg
+  }
+
+  /**
+   * 将来的にはブロックチェーンのサーバーのみがアクセス可能になるようにする
+   */
+  @Post('/relation/texthash')
+  async insertRelation(@Body() body: TextTransactionRelation) {
+    const result = await this.handleService.transactionInsert(body.transaction_hash, body.text_id, body.index);
+    return result
   }
 }

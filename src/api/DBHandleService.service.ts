@@ -80,4 +80,19 @@ export class DBHandleService {
     }
     return succeeded
   }
+
+  async transactionInsert (transactionHash: string, textId: number, index: number): Promise<string> {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      queryRunner.manager.insert(TextTransactionRelation, {text_id: textId, transaction_hash: transactionHash, index: index});
+      queryRunner.commitTransaction();
+      return 'success'
+    } catch (e) {
+      console.error(e)
+      queryRunner.rollbackTransaction();
+      return 'failed'
+    }
+  }
 }

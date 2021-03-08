@@ -11,5 +11,8 @@ export class TextTransactionRelation {
   @Column()
 
   transaction_hash: string;
+
+  @Column()
+  index: number
 }
 

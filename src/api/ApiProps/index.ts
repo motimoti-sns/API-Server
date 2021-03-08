@@ -5,3 +5,10 @@ export class UserPost {
   user_id: number;
   text: string;
 } 
+
+export class TextTransactionRelation {
+  @ApiProperty()
+  text_id: number;
+  index: number;
+  transaction_hash;
+}
