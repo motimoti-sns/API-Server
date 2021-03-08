@@ -6,13 +6,13 @@ dotenv.config()
 
 const blockChainAddr = process.env.BLOCKCHAIN_ADDRESS
 
-function stashHash (previousHash: string, currentHash: string) {
+export function stackHash (previousHash: string, currentHash: string) {
   return createHash('sha256')
     .update(previousHash + currentHash)
     .digest('hex')
 }
 
-function hash (toHash: string) {
+export function hash (toHash: string) {
   return createHash('sha256')
     .update(toHash)
     .digest('hex')
@@ -24,10 +24,10 @@ export async function createHashChain (userId: number, textBody: string, index: 
   let currentHash: string;
   if (tempLastHash[userId]) {
     previousHash = tempLastHash[userId]
-    currentHash = stashHash(tempLastHash[userId], hash(textBody));
+    currentHash = stackHash(tempLastHash[userId], hash(textBody));
   } else {
     previousHash = hash('genesis')
-    currentHash = stashHash(hash('genesis'), hash(textBody));
+    currentHash = stackHash(hash('genesis'), hash(textBody));
   }
   try {
     const res = await axios.post<{msg: string}>(`${blockChainAddr}/api/post`, {

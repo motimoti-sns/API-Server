@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, Put, Delete } from '@nestjs/common';
+import { Body, Controller, Post, Get, Put, Delete, Param } from '@nestjs/common';
 import {
   UserPost,
   TextTransactionRelation,
@@ -54,6 +54,12 @@ export class ApiController {
     } else {
       return 'failed'
     }
+  }
+
+  @Get('/validate/:userId')
+  async validate(@Param('userId') userId: string) {
+    const result = await this.handleService.validateHashChain(parseInt(userId))
+    return result
   }
 
   @Post('/register')

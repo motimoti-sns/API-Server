@@ -5,8 +5,14 @@ import { Text } from '../entities/text.entity';
 import { PostTextRelation } from '../entities/postTextRelation.entity';
 import { TextTransactionRelation} from '../entities/textTransactionRelation.entity';
 import { Users } from '../entities/users.entity';
-import { createHashChain } from './BlockChainFuncs';
+import { createHashChain, stackHash, hash } from './BlockChainFuncs';
 import  md5 from 'md5';
+import axios from 'axios';
+import * as dotenv from 'dotenv';
+dotenv.config()
+
+const blockChainAddr = process.env.BLOCKCHAIN_ADDRESS
+
 @Injectable()
 export class DBHandleService {
   constructor(private connection: Connection) {}
@@ -33,9 +39,9 @@ export class DBHandleService {
   async signup (email: string, password: string) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
-    await queryRunner.startTransaction();
     try {
       const user = await queryRunner.manager.findOne(Users, {email: email});
+      await queryRunner.release();
       if (user) {
         if (user.password === md5(password)) {
           return 'success'
@@ -157,6 +163,37 @@ export class DBHandleService {
     }
     await queryRunner.release()
     return succeeded
+  }
+
+  async validateHashChain (userId: number) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction()
+    try {
+      const texts = await queryRunner.manager.find(Text, {order: {index: 'ASC'}, where: {user_id: userId}});
+      const hashesInBlockChain: Array<string> = [];
+      const hashes: Array<string> = [];
+      let currentHash: string;
+      currentHash = hash('genesis');
+      for (const text of texts) {
+        const rel = await queryRunner.manager.findOne(TextTransactionRelation, {where: {text_id: text.id}});
+        const hashInBlockChain = await axios.get(`${blockChainAddr}/api/transaction/${rel.transaction_hash}`)
+        hashesInBlockChain.push(hashInBlockChain.data.hash)
+        currentHash = stackHash(currentHash, hash(text.body))
+        hashes.push(currentHash);
+      }
+      for (const index in hashes) {
+        if (hashes[index] !== hashesInBlockChain[index]) {
+          await queryRunner.commitTransaction();
+          return 'invalid'
+        }
+      }
+    } catch (e) {
+      await queryRunner.rollbackTransaction();
+      console.error(e);
+    }
+    await queryRunner.release();
+    return 'valid'
   }
 
   async transactionInsert (transactionHash: string, textId: number, index: number): Promise<string> {
