@@ -40,3 +40,7 @@ Content-Type: application/json
     "name": "tester",
     "password": "hogenhogen"
 }
+
+###
+GET http://localhost:5000/api/validate/105
+

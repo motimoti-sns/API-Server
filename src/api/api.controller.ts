@@ -58,6 +58,7 @@ export class ApiController {
 
   @Get('/validate/:userId')
   async validate(@Param('userId') userId: string) {
+    console.log('get: /validate/:userId')
     const result = await this.handleService.validateHashChain(parseInt(userId))
     return result
   }
