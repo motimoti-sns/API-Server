@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
+import { Body, Controller, Post, Get } from '@nestjs/common';
 import { UserPost, TextTransactionRelation } from './ApiProps';
 import { DBHandleService } from './DBHandleService.service';
 

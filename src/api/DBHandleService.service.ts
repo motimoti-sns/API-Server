@@ -4,26 +4,7 @@ import { Post } from '../entities/userpost.entity';
 import { Text } from '../entities/text.entity';
 import { PostTextRelation } from '../entities/postTextRelation.entity';
 import { TextTransactionRelation} from '../entities/textTransactionRelation.entity';
-import { sharing } from '../app.module';
-import { createHash } from 'crypto';
-import * as dotenv from 'dotenv';
-dotenv.config()
-import axios from 'axios';
-
-const blockChainAddr = process.env.BLOCKCHAIN_ADDRESS
-
-function stashHash (previousHash: string, currentHash: string) {
-  return createHash('sha256')
-    .update(previousHash + currentHash)
-    .digest('hex')
-}
-
-function hash (toHash: string) {
-  return createHash('sha256')
-    .update(toHash)
-    .digest('hex')
-}
-
+import { createHashChain } from './BlockChainFuncs';
 @Injectable()
 export class DBHandleService {
   constructor(private connection: Connection) {}
@@ -48,36 +29,7 @@ export class DBHandleService {
       queryRunner.manager.insert(PostTextRelation, {user_id: userId, text_id: insertedText.id, post_id: insertedPost.id});
       queryRunner.commitTransaction();
       succeeded = true
-      await this.createHashChain(userId, textBody, insertedText.index, insertedText.id);
-      // if (previousText) {
-      //   const previousTransactionHash = await queryRunner.manager.findOne(TextTransactionRelation, {text_id: previousText.id});
-      //   try {
-      //     const prevTransactionBody = await axios.get(`${blockChainAddr}/api/transaction/${previousTransactionHash.transaction_hash}`);
-      //     const currentHash = stashHash(prevTransactionBody.data.hash, hash(textBody));
-      //     axios.post(`${blockChainAddr}/api/post`, {
-      //       user_id: userId,
-      //       previous_hash: prevTransactionBody.data.hash,
-      //       hash: currentHash,
-      //       index: index,
-      //       text_id: insertedText.id
-      //     });
-      //   } catch (e) {
-      //     console.error('err: ', e)
-      //   }
-      // } else {
-      //   try {
-      //     await axios.post(`${blockChainAddr}/api/post`, {
-      //       user_id: userId,
-      //       previous_hash: hash('genesis'),
-      //       hash: stashHash(hash('genesis'), hash(textBody)),
-      //       index: index,
-      //       text_id: insertedText.id
-      //     });
-      //   } catch (e) {
-      //     console.error(e)
-      //   }
-      // }
-
+      await createHashChain(userId, textBody, insertedText.index, insertedText.id);
       return succeeded
     } catch (e) {
       console.log(e)
@@ -86,35 +38,7 @@ export class DBHandleService {
     return succeeded
   }
 
-  async createHashChain (userId: number, textBody: string, index: number, textId: number): Promise<string> {
-    const tempLastHash = sharing.data.lastHash
-    let previousHash: string
-    let currentHash: string;
-    if (tempLastHash[userId]) {
-      previousHash = tempLastHash[userId]
-      currentHash = stashHash(tempLastHash[userId], hash(textBody));
-    } else {
-      previousHash = hash('genesis')
-      currentHash = stashHash(hash('genesis'), hash(textBody));
-    }
-    try {
-      const res = await axios.post<{msg: string}>(`${blockChainAddr}/api/post`, {
-        user_id: userId,
-        previous_hash: previousHash,
-        hash: currentHash,
-        index: index,
-        text_id: textId
-      });
-      if (res.data.msg === 'success') {
-        tempLastHash[userId] = currentHash
-        sharing.setLastHash(tempLastHash)
-        return 'success'
-      }
-    } catch (e) {
-      console.error(e)
-      return 'failed'
-    }
-  }
+
 
   async transactionInsert (transactionHash: string, textId: number, index: number): Promise<string> {
     const queryRunner = this.connection.createQueryRunner();
