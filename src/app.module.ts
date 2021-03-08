@@ -12,6 +12,26 @@ import { TextTransactionRelation } from './entities/textTransactionRelation.enti
 import * as dotenv from 'dotenv';
 dotenv.config()
 
+interface Shar {
+  lastHash: {
+    [userId: number]: string
+  }
+}
+class SharData {
+  data: Shar
+  constructor(data: Shar) {
+    this.data = data
+  }
+
+  setLastHash (lastHash: {
+    [userId: number]: string
+  }) {
+    this.data.lastHash = lastHash
+  }
+}
+
+export const sharing = new SharData({lastHash: {}})
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
