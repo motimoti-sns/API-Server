@@ -28,5 +28,15 @@ DELETE http://localhost:5000/api/post
 Content-Type: application/json
 
 {
-    "post_id": 276,
+    "post_id": 276
+}
+
+###
+POST http://localhost:5000/api/register
+Content-Type: application/json
+
+{
+    "email": "hoge@fuga.com",
+    "name": "tester",
+    "password": "hogenhogen"
 }

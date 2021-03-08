@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Get, Put, Delete } from '@nestjs/common';
-import { UserPost, TextTransactionRelation, UserPostDiff, UserPost2Del } from './ApiProps';
+import { UserPost, TextTransactionRelation, UserPostDiff, UserPost2Del, UserData } from './ApiProps';
 import { DBHandleService } from './DBHandleService.service';
 
 @Controller('api')
@@ -42,6 +42,17 @@ export class ApiController {
   async deletePost(@Body() body: UserPost2Del) {
     console.log('delete: /api/post')
     const result = await this.handleService.deletePost(body.post_id)
+    if (result) {
+      return 'success'
+    } else {
+      return 'failed'
+    }
+  }
+
+  @Post('/register')
+  async register(@Body() body: UserData) {
+    console.log('post: /register')
+    const result = await this.handleService.register(body.email, body.name, body.password);
     if (result) {
       return 'success'
     } else {

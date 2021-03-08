@@ -4,10 +4,30 @@ import { Post } from '../entities/userpost.entity';
 import { Text } from '../entities/text.entity';
 import { PostTextRelation } from '../entities/postTextRelation.entity';
 import { TextTransactionRelation} from '../entities/textTransactionRelation.entity';
+import { Users } from '../entities/users.entity';
 import { createHashChain } from './BlockChainFuncs';
 @Injectable()
 export class DBHandleService {
   constructor(private connection: Connection) {}
+
+  async register(email: string, name: string, password: string) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    let succeeded: boolean;
+    succeeded = false;
+    try {
+      await queryRunner.manager.insert(Users, {name: name, email: email, password: password});
+      await queryRunner.commitTransaction();
+      succeeded = true
+      await queryRunner.release();
+    } catch (e) {
+      console.error(e);
+      queryRunner.rollbackTransaction();
+    }
+    return succeeded
+  }
+
   async insertPost(userId: number, textBody: string) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
@@ -105,13 +125,14 @@ export class DBHandleService {
     let succeeded: boolean;
     succeeded = false;
     try {
-      queryRunner.manager.update(Post, postId, {is_deleted: true});
-      queryRunner.commitTransaction();
+      await queryRunner.manager.update(Post, postId, {is_deleted: true});
+      await queryRunner.commitTransaction();
       succeeded = true
     } catch (e) {
       console.error(e)
-      queryRunner.rollbackTransaction();
+      await queryRunner.rollbackTransaction();
     }
+    await queryRunner.release()
     return succeeded
   }
 

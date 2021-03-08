@@ -9,6 +9,7 @@ import { Text } from './entities/text.entity';
 import { Post } from './entities/userpost.entity';
 import { PostTextRelation } from './entities/postTextRelation.entity';
 import { TextTransactionRelation } from './entities/textTransactionRelation.entity';
+import { Users } from './entities/users.entity';
 import * as dotenv from 'dotenv';
 dotenv.config()
 
@@ -41,7 +42,7 @@ export const sharing = new SharData({lastHash: {}})
       username: process.env.DB_USER_NAME,
       password: process.env.DB_USER_PASSWORD,
       database: process.env.DATA_BASE,
-      entities: [Post, Text, PostTextRelation, TextTransactionRelation],
+      entities: [Users, Post, Text, PostTextRelation, TextTransactionRelation],
       synchronize: true,
     }),
   ],
