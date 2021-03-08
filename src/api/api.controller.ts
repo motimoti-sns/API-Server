@@ -1,5 +1,5 @@
-import { Body, Controller, Post, Get } from '@nestjs/common';
-import { UserPost, TextTransactionRelation } from './ApiProps';
+import { Body, Controller, Post, Get, Put } from '@nestjs/common';
+import { UserPost, TextTransactionRelation, UserPostDiff } from './ApiProps';
 import { DBHandleService } from './DBHandleService.service';
 
 @Controller('api')
@@ -25,6 +25,17 @@ export class ApiController {
     console.log('get: /api/post')
     const result = await this.handleService.selectPosts();
     return result
+  }
+
+  @Put('/post')
+  async updatePost(@Body() body: UserPostDiff) {
+    console.log('put: /api/post')
+    const result = await this.handleService.updatePost(body.user_id, body.post_id, body.text);
+    if (result) {
+      return 'success'
+    } else {
+      return 'failed'
+    }
   }
 
   /**

@@ -12,3 +12,13 @@ Content-Type: application/json
 
 ###
 GET http://localhost:5000/api/post
+
+###
+PUT http://localhost:5000/api/post
+Content-Type: application/json
+
+{
+    "user_id": 105,
+    "post_id": 275,
+    "text": "chinponya!!!"
+}
