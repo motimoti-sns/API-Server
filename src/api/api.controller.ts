@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, Put, Delete, Param } from '@nestjs/common';
+import { Body, Headers, Controller, Post, Get, Put, Delete, Param } from '@nestjs/common';
 import {
   UserPost,
   TextTransactionRelation,
@@ -16,16 +16,21 @@ export class ApiController {
   constructor(private readonly handleService: DBHandleService) {}
 
   @Post('/post')
-  async createPost(@Body() body: UserPost) {
+  async createPost(@Body() body: UserPost, @Headers('Authorization') token: string) {
     console.log('post: /api/post')
-    const result = await this.handleService.insertPost(body.user_id, body.text)
-    let msg: string;
-    if (result) {
-      msg = 'success'
+    const verification = await verifyToken(token);
+    if (verification === 'ok') {
+      const result = await this.handleService.insertPost(body.user_id, body.text)
+      let msg: string;
+      if (result) {
+        msg = 'success'
+      } else {
+        msg = 'failed'
+      }
+      return msg
     } else {
-      msg = 'failed'
+      return 'not authorized'
     }
-    return msg
   }
 
   @Get('/post')
