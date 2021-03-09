@@ -34,39 +34,59 @@ export class ApiController {
   }
 
   @Get('/post')
-  async getPosts() {
+  async getPosts(@Headers('Authorization') token: string) {
     console.log('get: /api/post')
-    const result = await this.handleService.selectPosts();
-    return result
+    const verification = await verifyToken(token);
+    if (verification === 'ok') {
+      const result = await this.handleService.selectPosts();
+      return result
+    } else {
+      return 'not authorized'
+    }
   }
 
   @Put('/post')
-  async updatePost(@Body() body: UserPostDiff) {
+  async updatePost(@Body() body: UserPostDiff, @Headers('Authorization') token: string) {
     console.log('put: /api/post')
-    const result = await this.handleService.updatePost(body.user_id, body.post_id, body.text);
-    if (result) {
-      return 'success'
+    const verification = await verifyToken(token);
+    if (verification === 'ok') {
+      const result = await this.handleService.updatePost(body.user_id, body.post_id, body.text);
+      if (result) {
+        return 'success'
+      } else {
+        return 'failed'
+      }
     } else {
-      return 'failed'
+      return 'not authorized'
     }
   }
 
   @Delete('/post')
-  async deletePost(@Body() body: UserPost2Del) {
+  async deletePost(@Body() body: UserPost2Del, @Headers('Authorization') token: string) {
     console.log('delete: /api/post')
-    const result = await this.handleService.deletePost(body.post_id)
-    if (result) {
-      return 'success'
+    const verification = await verifyToken(token);
+    if (verification === 'ok') {
+      const result = await this.handleService.deletePost(body.post_id)
+      if (result) {
+        return 'success'
+      } else {
+        return 'failed'
+      }
     } else {
-      return 'failed'
+      return 'not authorized'
     }
   }
 
   @Get('/validate/:userId')
-  async validate(@Param('userId') userId: string) {
+  async validate(@Param('userId') userId: string, @Headers('Authorization') token: string) {
     console.log('get: /validate/:userId')
-    const result = await this.handleService.validateHashChain(parseInt(userId))
-    return result
+    const verification = await verifyToken(token);
+    if (verification === 'ok') {
+      const result = await this.handleService.validateHashChain(parseInt(userId))
+      return result
+    } else {
+      return 'not authorized'
+    }
   }
 
   @Post('/register')

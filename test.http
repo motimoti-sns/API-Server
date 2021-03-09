@@ -4,7 +4,7 @@ GET http://localhost:5000/
 ###
 POST http://localhost:5000/api/post
 Content-Type: application/json
-Authorization: 'eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK5bSssVLc72P604Abv8'
+Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK5bSssVLc72P604Abv8
 
 {
     "user_id": 1,
@@ -13,23 +13,26 @@ Authorization: 'eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3Gjn
 
 ###
 GET http://localhost:5000/api/post
+Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK5bSssVLc72P604Abv8
 
 ###
 PUT http://localhost:5000/api/post
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK5bSssVLc72P604Abv8
 
 {
-    "user_id": 105,
-    "post_id": 348,
+    "user_id": 1,
+    "post_id": 392,
     "text": "chinponya!!!"
 }
 
 ###
 DELETE http://localhost:5000/api/post
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK5bSssVLc72P604Abv8
 
 {
-    "post_id": 276
+    "post_id": 391
 }
 
 ###
