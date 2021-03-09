@@ -6,7 +6,7 @@ import { PostTextRelation } from '../entities/postTextRelation.entity';
 import { TextTransactionRelation} from '../entities/textTransactionRelation.entity';
 import { Users } from '../entities/users.entity';
 import { createHashChain, stackHash, hash } from './BlockChain';
-import  md5 from 'md5';
+import * as md5 from 'md5';
 import axios from 'axios';
 import * as dotenv from 'dotenv';
 dotenv.config()
@@ -36,7 +36,7 @@ export class DBHandleService {
     return succeeded
   }
 
-  async signup (email: string, password: string) {
+  async signup (email: string, password: string): Promise<string> {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     try {

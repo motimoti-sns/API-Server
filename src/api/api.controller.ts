@@ -8,6 +8,7 @@ import {
   LoginData
 } from './ApiProps';
 import { DBHandleService } from './DBHandleService.service';
+import { createToken, verifyToken } from './Auth';
 
 @Controller('api')
 export class ApiController {
@@ -78,6 +79,9 @@ export class ApiController {
   async login(@Body() body: LoginData) {
     console.log('post: /login')
     const result = await this.handleService.signup(body.email, body.password);
+    if (result === 'success') {
+      return createToken(body.email);
+    }
     return result
   }
 
