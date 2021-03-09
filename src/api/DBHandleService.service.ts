@@ -5,7 +5,7 @@ import { Text } from '../entities/text.entity';
 import { PostTextRelation } from '../entities/postTextRelation.entity';
 import { TextTransactionRelation} from '../entities/textTransactionRelation.entity';
 import { Users } from '../entities/users.entity';
-import { createHashChain, stackHash, hash } from './BlockChainFuncs';
+import { createHashChain, stackHash, hash } from './BlockChain';
 import  md5 from 'md5';
 import axios from 'axios';
 import * as dotenv from 'dotenv';

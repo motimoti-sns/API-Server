@@ -2,7 +2,6 @@ import { createHash } from 'crypto';
 import * as dotenv from 'dotenv';
 import axios from 'axios';
 import { sharing } from '../../app.module';
-import { DBHandleService } from '../DBHandleService.service';
 dotenv.config()
 
 const blockChainAddr = process.env.BLOCKCHAIN_ADDRESS
