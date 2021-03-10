@@ -12,11 +12,11 @@ Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK
 }
 
 ###
-GET http://localhost:5000/api/post/0/0
+GET http://localhost:5000/api/posts/0/0
 Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK5bSssVLc72P604Abv8
 
 ###
-GET http://localhost:5000/api/post/1/0
+GET http://localhost:5000/api/posts/1/5
 Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK5bSssVLc72P604Abv8
 
 ###

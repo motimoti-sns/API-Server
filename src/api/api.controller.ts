@@ -33,7 +33,7 @@ export class ApiController {
     }
   }
 
-  @Get('/post/:offset/:limit')
+  @Get('/posts/:offset/:limit')
   async getPosts(@Param('offset') offset: string, @Param('limit') limit: string, @Headers('Authorization') token: string) {
     console.log('get: /api/post')
     const verification = await verifyToken(token);
