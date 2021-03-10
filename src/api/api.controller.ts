@@ -33,12 +33,13 @@ export class ApiController {
     }
   }
 
-  @Get('/post')
-  async getPosts(@Headers('Authorization') token: string) {
+  @Get('/post/:limit')
+  async getPosts(@Param('limit') limit: string, @Headers('Authorization') token: string) {
     console.log('get: /api/post')
     const verification = await verifyToken(token);
     if (verification === 'ok') {
-      const result = await this.handleService.selectPosts();
+      const selectLimit = (parseInt(limit) !== 0) ? parseInt(limit) : undefined
+      const result = await this.handleService.selectPosts(selectLimit);
       return result
     } else {
       return 'not authorized'

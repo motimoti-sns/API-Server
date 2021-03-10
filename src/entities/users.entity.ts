@@ -15,6 +15,9 @@ export class Users {
 
   password: string;
 
+  @Column({default: false})
+  loggedIn: boolean;
+
   @Column({default: 0})
   post_count: number;
 }
