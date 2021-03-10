@@ -26,7 +26,7 @@ Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK
 
 {
     "user_id": 1,
-    "post_id": 392,
+    "post_id": 393,
     "text": "chinponya!!!"
 }
 
@@ -40,7 +40,7 @@ Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK
 }
 
 ###
-GET http://localhost:5000/api/post/history/395
+GET http://localhost:5000/api/post/history/393
 Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK5bSssVLc72P604Abv8
 
 ###
