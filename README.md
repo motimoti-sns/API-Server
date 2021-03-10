@@ -18,7 +18,7 @@
 
 |　URL　| HTTPメソッド | 受け取るデータ形式 | 返すデータ形式 | 返すエラー | 備考 |
 | ---- | ---- | ---- | ---- | ---- | ---- |
-|  /api/post  |  GET  | なし | JSONの配列 | なし | HeaderにAuthorizationプロパティが必要 |
+|  /api/post/:limit  |  GET  | limit: 取得するデータの数、０で全て取得 | JSONの配列 | なし | HeaderにAuthorizationプロパティが必要 |
 
 ```typescript
 [
