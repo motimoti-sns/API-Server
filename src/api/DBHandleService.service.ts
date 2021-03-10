@@ -89,7 +89,7 @@ export class DBHandleService {
     return succeeded
   }
 
-  async selectPosts (limit?: number) {
+  async selectPosts (offset?: number, limit?: number) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect()
     const result: Array<{
@@ -98,7 +98,7 @@ export class DBHandleService {
       text_body: string,
       timestamp: string,
     }> = []
-    const posts = await queryRunner.manager.find(Post, { where: { is_deleted: false }, take: limit});
+    const posts = await queryRunner.manager.find(Post, { where: { is_deleted: false }, take: limit, skip: offset});
     for (const post of posts) {
       try {
         const textBody = await (await queryRunner.manager.findOne(Text, {id: post.text_id})).body;
