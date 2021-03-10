@@ -4,7 +4,7 @@
 
 |　URL　| HTTPメソッド | 受け取るデータ形式 | 返すデータ形式 | 返すエラー | 備考 |
 | ---- | ---- | ---- | ---- | ---- | ---- |
-|  /api/post  |  POST  | JSON | string | なし | なし |
+|  /api/post  |  POST  | JSON | string | なし | HeaderにAuthorizationプロパティが必要 |
 
 ## 受け取るデータ
 
@@ -18,7 +18,7 @@
 
 |　URL　| HTTPメソッド | 受け取るデータ形式 | 返すデータ形式 | 返すエラー | 備考 |
 | ---- | ---- | ---- | ---- | ---- | ---- |
-|  /api/post  |  GET  | なし | JSONの配列 | なし | なし |
+|  /api/post  |  GET  | なし | JSONの配列 | なし | HeaderにAuthorizationプロパティが必要 |
 
 ```typescript
 [
@@ -34,7 +34,7 @@
 # 投稿更新
 |　URL　| HTTPメソッド | 受け取るデータ形式 | 返すデータ形式 | 返すエラー | 備考 |
 | ---- | ---- | ---- | ---- | ---- | ---- |
-|  /api/post  |  PUT  | JSON | string | なし | なし |
+|  /api/post  |  PUT  | JSON | string | なし | HeaderにAuthorizationプロパティが必要 |
 
 
 ```typescript
@@ -48,7 +48,7 @@
 # 投稿削除
 |　URL　| HTTPメソッド | 受け取るデータ形式 | 返すデータ形式 | 返すエラー | 備考 |
 | ---- | ---- | ---- | ---- | ---- | ---- |
-|  /api/post  | 　DELETE  | JSON | string | なし | なし |
+|  /api/post  | 　DELETE  | JSON | string | なし | HeaderにAuthorizationプロパティが必要 |
 
 ```typescript
 {
