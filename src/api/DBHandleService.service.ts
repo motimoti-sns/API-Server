@@ -165,6 +165,25 @@ export class DBHandleService {
     return succeeded
   }
 
+  async selectPostsHistory(postId: number) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect()
+    try {
+      const rels = await queryRunner.manager.find(PostTextRelation, {where: {post_id: postId}});
+      const result: Array<string> = [];
+      for (const rel of rels) {
+        const text = await queryRunner.manager.findOne(Text, { where: {id: rel.text_id}});
+        result.push(text.body);
+      }
+      await queryRunner.release();
+      return result
+    } catch (e) {
+      console.error(e);
+      await queryRunner.release();
+      return 'failed'
+    }
+  }
+
   async validateHashChain (userId: number) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();

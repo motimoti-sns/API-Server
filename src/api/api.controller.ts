@@ -48,6 +48,21 @@ export class ApiController {
     }
   }
 
+  /**
+   * 指定された投稿の更新差分を取得する
+  */
+  @Get('/post/history/:postId')
+  async getPostHistory(@Param('postId') postId: string, @Headers('Authorization') token: string) {
+    console.log('get: /post/history/')
+    const veryfication = await verifyToken(token);
+    if (veryfication === 'ok') {
+      const result = await this.handleService.selectPostsHistory(parseInt(postId));
+      return result
+    } else {
+      return 'not authorized'
+    }
+  }
+
   @Put('/post')
   async updatePost(@Body() body: UserPostDiff, @Headers('Authorization') token: string) {
     console.log('put: /api/post')
