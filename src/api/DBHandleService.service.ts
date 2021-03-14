@@ -155,19 +155,24 @@ export class DBHandleService {
   async deletePost(postId: number) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
-    await queryRunner.startTransaction();
-    let succeeded: boolean;
-    succeeded = false;
-    try {
-      await queryRunner.manager.update(Post, postId, {is_deleted: true});
-      await queryRunner.commitTransaction();
-      succeeded = true
-    } catch (e) {
-      console.error(e)
-      await queryRunner.rollbackTransaction();
+    const post = await queryRunner.manager.findOne(Post, {where: {id: postId}});
+    let msg: string;
+    if (post && !post.is_deleted) {
+      await queryRunner.startTransaction();
+      try {
+        await queryRunner.manager.update(Post, postId, {is_deleted: true});
+        await queryRunner.commitTransaction();
+        msg = 'success'
+      } catch (e) {
+        console.error(e)
+        await queryRunner.rollbackTransaction();
+        msg = 'failed'
+      }
+    } else {
+      return 'resource not found'
     }
     await queryRunner.release()
-    return succeeded
+    return msg
   }
 
   async selectPostsHistory(postId: number) {
@@ -175,6 +180,9 @@ export class DBHandleService {
     await queryRunner.connect()
     try {
       const rels = await queryRunner.manager.find(PostTextRelation, {where: {post_id: postId}});
+      if (rels.length === 0) {
+        return 'resorce not found'
+      }
       const result: Array<string> = [];
       for (const rel of rels) {
         const text = await queryRunner.manager.findOne(Text, { where: {id: rel.text_id}});

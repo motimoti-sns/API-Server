@@ -37,7 +37,7 @@ export class ApiController {
     if (verification === 'ok') {
       const result = await this.handleService.insertPost(body.user_id, body.text)
       if (result) {
-        return 'success'
+        res.status(201).send('success')
       } else {
         res.status(500).send('failed')
       }
@@ -60,7 +60,7 @@ export class ApiController {
         return '"limit" cannot be 0 when "offset" is more than 1'
       }
       const result = await this.handleService.selectPosts(parseInt(offset), parseInt(limit));
-      return result
+      res.status(200).send(result)
     } else {
       res.status(401).send('not authorized')
     }
@@ -79,7 +79,11 @@ export class ApiController {
     const veryfication = await verifyToken(token);
     if (veryfication === 'ok') {
       const result = await this.handleService.selectPostsHistory(parseInt(postId));
-      return result
+      if (result === 'resorce not found') {
+        res.status(404).send(result)
+      } else {
+        res.status(200).send(result)
+      }
     } else {
       res.status(401).send('not authorized')
     }
@@ -96,9 +100,9 @@ export class ApiController {
     if (verification === 'ok') {
       const result = await this.handleService.updatePost(body.user_id, body.post_id, body.text);
       if (result === 'resource not found') {
-        res.status(404).send('resource not found')
+        res.status(404).send(result)
       } else {
-        return result
+        res.status(201).send(result)
       }
     } else {
       res.status(401).send('not authorized')
@@ -115,8 +119,10 @@ export class ApiController {
     const verification = await verifyToken(token);
     if (verification === 'ok') {
       const result = await this.handleService.deletePost(body.post_id)
-      if (result) {
-        return 'success'
+      if (result === 'success') {
+        res.status(200).send(result)
+      } else if (result === 'resource not found') {
+        res.status(404).send('resource not found')
       } else {
         res.status(500).send('failed')
       }
