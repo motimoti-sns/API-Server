@@ -69,11 +69,7 @@ export class ApiController {
     const verification = await verifyToken(token);
     if (verification === 'ok') {
       const result = await this.handleService.updatePost(body.user_id, body.post_id, body.text);
-      if (result) {
-        return 'success'
-      } else {
-        return 'failed'
-      }
+      return result
     } else {
       return 'not authorized'
     }

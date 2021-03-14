@@ -119,32 +119,37 @@ export class DBHandleService {
   async updatePost(userId: number, postId: number, textBody: string) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
-    await queryRunner.startTransaction();
-    let succeeded: boolean;
-    succeeded = false;
-    try {
-      const date = new Date().getTime().toString()
-      const previousText = await queryRunner.manager.findOne(Text, {user_id: userId}, {order: {id: 'DESC'}});
-      let index: number;
-      index = 0
-      if (previousText) {
-        index = previousText.index + 1
+    const post = await queryRunner.manager.findOne(Post, { where: {id: postId,}});
+    let msg: string;
+    if (post) {
+      await queryRunner.startTransaction();
+      try {
+        const date = new Date().getTime().toString()
+        const previousText = await queryRunner.manager.findOne(Text, {user_id: userId}, {order: {id: 'DESC'}});
+        let index: number;
+        index = 0
+        if (previousText) {
+          index = previousText.index + 1
+        }
+        //テキストを追加
+        queryRunner.manager.insert(Text, {user_id: userId, body: textBody, index: index, timestamp: date});
+        const insertedText =  await queryRunner.manager.findOne(Text, {user_id: userId, body: textBody, index: index, timestamp: date});
+        //投稿を更新
+        queryRunner.manager.update(Post, postId, {text_id: insertedText.id});
+        queryRunner.manager.insert(PostTextRelation, {user_id: userId, text_id: insertedText.id, post_id: postId});
+        queryRunner.commitTransaction();
+        msg = 'success'
+        await createHashChain(userId, textBody, insertedText.index, insertedText.id);
+      } catch (e) {
+        console.error(e);
+        queryRunner.rollbackTransaction();
+        msg = 'failed'
       }
-      //テキストを追加
-      queryRunner.manager.insert(Text, {user_id: userId, body: textBody, index: index, timestamp: date});
-      const insertedText =  await queryRunner.manager.findOne(Text, {user_id: userId, body: textBody, index: index, timestamp: date});
-      //投稿を更新
-      queryRunner.manager.update(Post, postId, {text_id: insertedText.id});
-      queryRunner.manager.insert(PostTextRelation, {user_id: userId, text_id: insertedText.id, post_id: postId});
-      queryRunner.commitTransaction();
-      succeeded = true
-      await createHashChain(userId, textBody, insertedText.index, insertedText.id);
-    } catch (e) {
-      console.error(e);
-      queryRunner.rollbackTransaction();
+    } else {
+      msg = 'resource not found'
     }
     queryRunner.release();
-    return succeeded
+    return msg
   }
 
   async deletePost(postId: number) {
