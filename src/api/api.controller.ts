@@ -1,4 +1,14 @@
-import { Body, Headers, Controller, Post, Get, Put, Delete, Param } from '@nestjs/common';
+import {
+  Body,
+  Headers,
+  Controller,
+  Post,
+  Get,
+  Put,
+  Delete,
+  Param,
+  Res
+} from '@nestjs/common';
 import {
   UserPost,
   TextTransactionRelation,
@@ -9,6 +19,7 @@ import {
 } from './ApiProps';
 import { DBHandleService } from './DBHandleService.service';
 import { createToken, verifyToken } from './Auth';
+import { Response } from 'express';
 
 @Controller('api')
 export class ApiController {
@@ -16,25 +27,32 @@ export class ApiController {
   constructor(private readonly handleService: DBHandleService) {}
 
   @Post('/post')
-  async createPost(@Body() body: UserPost, @Headers('Authorization') token: string) {
+  async createPost(
+    @Body() body: UserPost,
+    @Headers('Authorization') token: string,
+    @Res() res: Response
+  ) {
     console.log('post: /api/post')
     const verification = await verifyToken(token);
     if (verification === 'ok') {
       const result = await this.handleService.insertPost(body.user_id, body.text)
-      let msg: string;
       if (result) {
-        msg = 'success'
+        return 'success'
       } else {
-        msg = 'failed'
+        res.status(500).send('failed')
       }
-      return msg
     } else {
-      return 'not authorized'
+      res.status(401).send('not authorized')
     }
   }
 
   @Get('/posts/:offset/:limit')
-  async getPosts(@Param('offset') offset: string, @Param('limit') limit: string, @Headers('Authorization') token: string) {
+  async getPosts(
+    @Param('offset') offset: string,
+    @Param('limit') limit: string,
+    @Headers('Authorization') token: string,
+    @Res() res: Response
+  ) {
     console.log('get: /api/post')
     const verification = await verifyToken(token);
     if (verification === 'ok') {
@@ -44,7 +62,7 @@ export class ApiController {
       const result = await this.handleService.selectPosts(parseInt(offset), parseInt(limit));
       return result
     } else {
-      return 'not authorized'
+      res.status(401).send('not authorized')
     }
   }
 
@@ -52,31 +70,47 @@ export class ApiController {
    * 指定された投稿の更新差分を取得する
   */
   @Get('/post/history/:postId')
-  async getPostHistory(@Param('postId') postId: string, @Headers('Authorization') token: string) {
+  async getPostHistory(
+    @Param('postId') postId: string,
+    @Headers('Authorization') token: string,
+    @Res() res: Response
+  ) {
     console.log('get: /post/history/')
     const veryfication = await verifyToken(token);
     if (veryfication === 'ok') {
       const result = await this.handleService.selectPostsHistory(parseInt(postId));
       return result
     } else {
-      return 'not authorized'
+      res.status(401).send('not authorized')
     }
   }
 
   @Put('/post')
-  async updatePost(@Body() body: UserPostDiff, @Headers('Authorization') token: string) {
+  async updatePost(
+    @Body() body: UserPostDiff,
+    @Headers('Authorization') token: string,
+    @Res() res: Response
+  ) {
     console.log('put: /api/post')
     const verification = await verifyToken(token);
     if (verification === 'ok') {
       const result = await this.handleService.updatePost(body.user_id, body.post_id, body.text);
-      return result
+      if (result === 'resource not found') {
+        res.status(404).send('resource not found')
+      } else {
+        return result
+      }
     } else {
-      return 'not authorized'
+      res.status(401).send('not authorized')
     }
   }
 
   @Delete('/post')
-  async deletePost(@Body() body: UserPost2Del, @Headers('Authorization') token: string) {
+  async deletePost(
+    @Body() body: UserPost2Del,
+    @Headers('Authorization') token: string,
+    @Res() res: Response
+  ) {
     console.log('delete: /api/post')
     const verification = await verifyToken(token);
     if (verification === 'ok') {
@@ -84,22 +118,26 @@ export class ApiController {
       if (result) {
         return 'success'
       } else {
-        return 'failed'
+        res.status(500).send('failed')
       }
     } else {
-      return 'not authorized'
+      res.status(401).send('not authorized')
     }
   }
 
   @Get('/validate/:userId')
-  async validate(@Param('userId') userId: string, @Headers('Authorization') token: string) {
+  async validate(
+    @Param('userId') userId: string,
+    @Headers('Authorization') token: string,
+    @Res() res: Response
+  ) {
     console.log('get: /validate/:userId')
     const verification = await verifyToken(token);
     if (verification === 'ok') {
       const result = await this.handleService.validateHashChain(parseInt(userId))
       return result
     } else {
-      return 'not authorized'
+      res.status(401).send('not authorized')
     }
   }
 
