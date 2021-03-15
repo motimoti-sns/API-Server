@@ -222,6 +222,18 @@ export class DBHandleService {
     return 'valid'
   }
 
+  async getUsers () {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    try {
+      const result = await queryRunner.manager.find(Users);
+      return result
+    } catch (e) {
+      console.log(e)
+    }
+    await queryRunner.release();
+  } 
+
   async transactionInsert (transactionHash: string, textId: number, index: number): Promise<string> {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();

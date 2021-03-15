@@ -168,6 +168,13 @@ export class ApiController {
     return result
   }
 
+  @Get('/users')
+  async getUsers() {
+    console.log('get: /users')
+    const result = await this.handleService.getUsers();
+    return result
+  }
+
   /**
    * 将来的にはブロックチェーンのサーバーのみがアクセス可能になるようにする
    */
