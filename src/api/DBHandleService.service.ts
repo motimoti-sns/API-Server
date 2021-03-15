@@ -36,7 +36,7 @@ export class DBHandleService {
     return succeeded
   }
 
-  async signup (email: string, password: string): Promise<string> {
+  async signin (email: string, password: string): Promise<string> {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     try {

@@ -161,7 +161,7 @@ export class ApiController {
   @Post('/login')
   async login(@Body() body: LoginData) {
     console.log('post: /login')
-    const result = await this.handleService.signup(body.email, body.password);
+    const result = await this.handleService.signin(body.email, body.password);
     if (result === 'success') {
       return createToken(body.email);
     }
