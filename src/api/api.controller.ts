@@ -141,7 +141,7 @@ export class ApiController {
     const verification = await verifyToken(token);
     if (verification === 'ok') {
       const result = await this.handleService.validateHashChain(parseInt(userId))
-      return result
+      res.status(200).send(result)
     } else {
       res.status(401).send('not authorized')
     }

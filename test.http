@@ -36,11 +36,11 @@ Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK5bSssVLc72P604Abv8
 
 {
-    "post_id": 92
+    "post_id": 1
 }
 
 ###
-GET http://localhost:5000/api/post/history/403
+GET http://localhost:5000/api/post/history/1
 Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK5bSssVLc72P604Abv8
 
 ###
@@ -63,7 +63,8 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:5000/api/validate/105
+GET http://localhost:5000/api/validate/1
+Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK5bSssVLc72P604Abv8
 
 
 ###
