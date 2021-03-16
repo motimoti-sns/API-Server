@@ -65,3 +65,7 @@ Content-Type: application/json
 ###
 GET http://localhost:5000/api/validate/105
 
+
+###
+
+GET http://localhost:5000/api/users
