@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatsController } from './cats/cats.controller';
 import { ApiController } from './api/api.controller';
-import { DBHandleService } from './api/DBHandleService.service';
+import { APIService } from './api/apiservice.service';
 import { PostApiController } from './postAPI/postapi.controller';
 import { PostAPIService } from './postAPI/postapi.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -49,6 +49,6 @@ export const sharing = new SharData({lastHash: {}})
     }),
   ],
   controllers: [AppController, CatsController, ApiController, PostApiController],
-  providers: [AppService, DBHandleService, PostAPIService],
+  providers: [AppService, APIService, PostAPIService],
 })
 export class AppModule {}

@@ -4,27 +4,22 @@ import {
   Controller,
   Post,
   Get,
-  Put,
-  Delete,
   Param,
   Res
 } from '@nestjs/common';
 import {
-  UserPost,
   TextTransactionRelation,
-  UserPostDiff,
-  UserPost2Del,
   UserData,
   LoginData
 } from './ApiProps';
-import { DBHandleService } from './DBHandleService.service';
+import { APIService } from './apiservice.service';
 import { createToken, verifyToken } from './Auth';
 import { Response } from 'express';
 
 @Controller('api')
 export class ApiController {
 
-  constructor(private readonly handleService: DBHandleService) {}
+  constructor(private readonly handleService: APIService) {}
 
   @Get('/posts/:offset/:limit')
   async getPosts(

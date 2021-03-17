@@ -14,7 +14,7 @@ dotenv.config();
 const blockChainAddr = process.env.BLOCKCHAIN_ADDRESS;
 
 @Injectable()
-export class DBHandleService {
+export class APIService {
   constructor(private connection: Connection) {}
 
   async register(email: string, name: string, password: string) {
