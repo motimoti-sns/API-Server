@@ -23,3 +23,11 @@ export class TextTransactionRelation {
   index: number;
   transaction_hash: string;
 }
+
+export class LogData {
+  @ApiProperty()
+  user_id: number;
+  operation: string;
+  transaction_hash: string;
+  timestamp: string;
+}

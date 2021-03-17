@@ -10,7 +10,8 @@ import {
 import {
   TextTransactionRelation,
   UserData,
-  LoginData
+  LoginData,
+  LogData
 } from './ApiProps';
 import { APIService } from './apiservice.service';
 import { createToken, verifyToken } from './../utils/Auth';
@@ -89,9 +90,24 @@ export class ApiController {
    * 将来的にはブロックチェーンのサーバーのみがアクセス可能になるようにする
    */
   @Post('/relation/texthash')
-  async insertRelation(@Body() body: TextTransactionRelation) {
+  async insertTextRelation(@Body() body: TextTransactionRelation) {
     console.log('post: /relation/texthash')
-    const result = await this.handleService.transactionInsert(body.transaction_hash, body.text_id, body.index);
+    const result = await this.handleService.textTransactionInsert(body.transaction_hash, body.text_id, body.index);
+    return result
+  }
+
+  /**
+   * 将来的にはブロックチェーンのサーバーのみがアクセス可能になるようにする
+   */
+  @Post('/relation/log')
+  async insertLogRelation(@Body() Body: LogData) {
+    console.log('post: /relation/log')
+    const result = await this.handleService.logTransactionInsert(
+      Body.user_id,
+      Body.operation,
+      Body.transaction_hash,
+      Body.timestamp
+    );
     return result
   }
 }

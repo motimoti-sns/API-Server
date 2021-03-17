@@ -3,6 +3,7 @@ import { Connection } from 'typeorm';
 import { Post } from '../entities/userpost.entity';
 import { Text } from '../entities/text.entity';
 import { TextTransactionRelation } from '../entities/textTransactionRelation.entity';
+import { Logs } from '../entities/logs.entity';
 import { Users } from '../entities/users.entity';
 import { stackHash, hash } from '../utils/BlockChain';
 import * as md5 from 'md5';
@@ -136,7 +137,7 @@ export class APIService {
     }
   }
 
-  async transactionInsert(
+  async textTransactionInsert(
     transactionHash: string,
     textId: number,
     index: number
@@ -149,6 +150,33 @@ export class APIService {
         text_id: textId,
         transaction_hash: transactionHash,
         index: index,
+      });
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return 'success';
+    } catch (e) {
+      console.error(e);
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      return 'failed';
+    }
+  }
+  
+  async logTransactionInsert(
+    userId: number,
+    operation: string,
+    transactionHash: string,
+    timestamp: string,
+  ): Promise<string> {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      await queryRunner.manager.insert(Logs, {
+        user_id: userId, 
+        operation: operation,
+        transaction_hash: transactionHash,
+        timestamp: timestamp,
       });
       await queryRunner.commitTransaction();
       await queryRunner.release();
