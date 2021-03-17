@@ -3,7 +3,7 @@ import { Connection } from 'typeorm';
 import { Post } from '../entities/userpost.entity';
 import { Text } from '../entities/text.entity';
 import { PostTextRelation } from '../entities/postTextRelation.entity';
-import { createHashChain } from './BlockChain';
+import { createHashChain } from '../utils/BlockChain';
 import * as dotenv from 'dotenv';
 dotenv.config();
 

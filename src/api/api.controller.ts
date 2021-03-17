@@ -13,7 +13,7 @@ import {
   LoginData
 } from './ApiProps';
 import { APIService } from './apiservice.service';
-import { createToken, verifyToken } from './Auth';
+import { createToken, verifyToken } from './../utils/Auth';
 import { Response } from 'express';
 
 @Controller('api')

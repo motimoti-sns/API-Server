@@ -11,14 +11,11 @@ import {
 } from '@nestjs/common';
 import {
   UserPost,
-  TextTransactionRelation,
   UserPostDiff,
   UserPost2Del,
-  UserData,
-  LoginData
 } from './ApiProps';
 import { PostAPIService } from './postapi.service';
-import { createToken, verifyToken } from './Auth';
+import { verifyToken } from '../utils/Auth';
 import { Response } from 'express';
 
 @Controller('api/post')
