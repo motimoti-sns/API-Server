@@ -17,6 +17,11 @@ import {
 import { PostAPIService } from './postapi.service';
 import { verifyToken } from '../utils/Auth';
 import { Response } from 'express';
+import axios from 'axios';
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+const blockChainAddr = process.env.BLOCKCHAIN_ADDRESS
 
 @Controller('api/post')
 export class PostApiController {
@@ -31,8 +36,14 @@ export class PostApiController {
   ) {
     console.log('post: /api/post')
     const verification = await verifyToken(token);
+    const date = new Date().getTime().toString();
     if (verification === 'ok') {
-      const result = await this.handleService.insertPost(body.user_id, body.text)
+      const result = await this.handleService.insertPost(body.user_id, body.text, date)
+      axios.post(`${blockChainAddr}/api/log`, {
+        user_id: body.user_id,
+        operation: 'post: /api/post',
+        timestamp: date
+      })
       if (result) {
         res.status(201).send('success')
       } else {

@@ -4,27 +4,11 @@ import { Post } from '../entities/userpost.entity';
 import { Text } from '../entities/text.entity';
 import { PostTextRelation } from '../entities/postTextRelation.entity';
 import { createHashChain } from '../utils/BlockChain';
-import axios from 'axios';
-import * as dotenv from 'dotenv';
-dotenv.config();
-
-const blockChainAddr = process.env.BLOCKCHAIN_ADDRESS
 
 @Injectable()
 export class PostAPIService {
   constructor(private connection: Connection) {}
-  async insertPost(userId: number, textBody: string) {
-    const date = new Date().getTime().toString();
-    //ブロックチェーンにログを書き込む
-    try {
-      await axios.post<{msg: string}>(`${blockChainAddr}/api/log`, {
-        user_id: userId,
-        operation: 'post: /api/post',
-        timestamp: date
-      })
-    } catch (e) {
-      console.log(e)
-    }
+  async insertPost(userId: number, textBody: string, date: string) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
