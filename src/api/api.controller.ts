@@ -26,26 +26,6 @@ export class ApiController {
 
   constructor(private readonly handleService: DBHandleService) {}
 
-  @Post('/post')
-  async createPost(
-    @Body() body: UserPost,
-    @Headers('Authorization') token: string,
-    @Res() res: Response
-  ) {
-    console.log('post: /api/post')
-    const verification = await verifyToken(token);
-    if (verification === 'ok') {
-      const result = await this.handleService.insertPost(body.user_id, body.text)
-      if (result) {
-        res.status(201).send('success')
-      } else {
-        res.status(500).send('failed')
-      }
-    } else {
-      res.status(401).send('not authorized')
-    }
-  }
-
   @Get('/posts/:offset/:limit')
   async getPosts(
     @Param('offset') offset: string,
@@ -61,71 +41,6 @@ export class ApiController {
       }
       const result = await this.handleService.selectPosts(parseInt(offset), parseInt(limit));
       res.status(200).send(result)
-    } else {
-      res.status(401).send('not authorized')
-    }
-  }
-
-  /**
-   * 指定された投稿の更新差分を取得する
-  */
-  @Get('/post/history/:postId')
-  async getPostHistory(
-    @Param('postId') postId: string,
-    @Headers('Authorization') token: string,
-    @Res() res: Response
-  ) {
-    console.log('get: /post/history/')
-    const veryfication = await verifyToken(token);
-    if (veryfication === 'ok') {
-      const result = await this.handleService.selectPostsHistory(parseInt(postId));
-      if (result === 'resorce not found') {
-        res.status(404).send(result)
-      } else {
-        res.status(200).send(result)
-      }
-    } else {
-      res.status(401).send('not authorized')
-    }
-  }
-
-  @Put('/post')
-  async updatePost(
-    @Body() body: UserPostDiff,
-    @Headers('Authorization') token: string,
-    @Res() res: Response
-  ) {
-    console.log('put: /api/post')
-    const verification = await verifyToken(token);
-    if (verification === 'ok') {
-      const result = await this.handleService.updatePost(body.user_id, body.post_id, body.text);
-      if (result === 'resource not found') {
-        res.status(404).send(result)
-      } else {
-        res.status(201).send(result)
-      }
-    } else {
-      res.status(401).send('not authorized')
-    }
-  }
-
-  @Delete('/post')
-  async deletePost(
-    @Body() body: UserPost2Del,
-    @Headers('Authorization') token: string,
-    @Res() res: Response
-  ) {
-    console.log('delete: /api/post')
-    const verification = await verifyToken(token);
-    if (verification === 'ok') {
-      const result = await this.handleService.deletePost(body.post_id)
-      if (result === 'success') {
-        res.status(200).send(result)
-      } else if (result === 'resource not found') {
-        res.status(404).send('resource not found')
-      } else {
-        res.status(500).send('failed')
-      }
     } else {
       res.status(401).send('not authorized')
     }

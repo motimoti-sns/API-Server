@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { CatsController } from './cats/cats.controller';
 import { ApiController } from './api/api.controller';
 import { DBHandleService } from './api/DBHandleService.service';
+import { PostApiController } from './postAPI/postapi.controller';
+import { PostAPIService } from './postAPI/postapi.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Text } from './entities/text.entity';
 import { Post } from './entities/userpost.entity';
@@ -46,7 +48,7 @@ export const sharing = new SharData({lastHash: {}})
       synchronize: true,
     }),
   ],
-  controllers: [AppController, CatsController, ApiController],
-  providers: [AppService, DBHandleService],
+  controllers: [AppController, CatsController, ApiController, PostApiController],
+  providers: [AppService, DBHandleService, PostAPIService],
 })
 export class AppModule {}
