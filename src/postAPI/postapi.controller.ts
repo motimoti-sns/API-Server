@@ -17,6 +17,7 @@ import {
 import { PostAPIService } from './postapi.service';
 import { verifyToken } from '../utils/Auth';
 import { Response } from 'express';
+import { decode } from 'jsonwebtoken';
 import axios from 'axios';
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -38,12 +39,12 @@ export class PostApiController {
     const verification = await verifyToken(token);
     const date = new Date().getTime().toString();
     if (verification === 'ok') {
-      const result = await this.handleService.insertPost(body.user_id, body.text, date)
       axios.post(`${blockChainAddr}/api/log`, {
         user_id: body.user_id,
         operation: 'post: /api/post',
         timestamp: date
       })
+      const result = await this.handleService.insertPost(body.user_id, body.text, date)
       if (result) {
         res.status(201).send('success')
       } else {
@@ -65,7 +66,14 @@ export class PostApiController {
   ) {
     console.log('get: /post/history/')
     const veryfication = await verifyToken(token);
+    const date = new Date().getTime().toString();
     if (veryfication === 'ok') {
+      const userId = decode(token)['userId'] as number
+      axios.post(`${blockChainAddr}/api/log`, {
+        user_id: userId,
+        operation: 'get: /api/post/history',
+        timestamp: date
+      })
       const result = await this.handleService.selectPostsHistory(parseInt(postId));
       if (result === 'resorce not found') {
         res.status(404).send(result)
@@ -85,7 +93,14 @@ export class PostApiController {
   ) {
     console.log('put: /api/post')
     const verification = await verifyToken(token);
+    const date = new Date().getTime().toString();
     if (verification === 'ok') {
+      const userId = decode(token)['userId'] as number
+      axios.post(`${blockChainAddr}/api/log`, {
+        user_id: userId,
+        operation: 'put: /api/post',
+        timestamp: date
+      })
       const result = await this.handleService.updatePost(body.user_id, body.post_id, body.text);
       if (result === 'resource not found') {
         res.status(404).send(result)
@@ -105,7 +120,14 @@ export class PostApiController {
   ) {
     console.log('delete: /api/post')
     const verification = await verifyToken(token);
+    const date = new Date().getTime().toString();
     if (verification === 'ok') {
+      const userId = decode(token)['userId'] as number
+      axios.post(`${blockChainAddr}/api/log`, {
+        user_id: userId,
+        operation: 'delete: /api/post',
+        timestamp: date
+      })
       const result = await this.handleService.deletePost(body.post_id)
       if (result === 'success') {
         res.status(200).send(result)

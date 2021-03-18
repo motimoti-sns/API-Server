@@ -4,7 +4,7 @@ GET http://localhost:5000/
 ###
 POST http://localhost:5000/api/post
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK5bSssVLc72P604Abv8
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhvZ2VAZnVnYS5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTYxNjAzMzc2N30.H3pfFxzE2klN_dq-gRxVZzKZdrhlngaV7iKK3kJhzTs
 
 {
     "user_id": 1,
@@ -22,18 +22,18 @@ Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK
 ###
 PUT http://localhost:5000/api/post
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK5bSssVLc72P604Abv8
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhvZ2VAZnVnYS5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTYxNjAzMzc2N30.H3pfFxzE2klN_dq-gRxVZzKZdrhlngaV7iKK3kJhzTs
 
 {
     "user_id": 1,
-    "post_id": 803,
+    "post_id": 1,
     "text": "examexam"
 }
 
 ###
 DELETE http://localhost:5000/api/post
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK5bSssVLc72P604Abv8
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhvZ2VAZnVnYS5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTYxNjAzMzc2N30.H3pfFxzE2klN_dq-gRxVZzKZdrhlngaV7iKK3kJhzTs
 
 {
     "post_id": 1
@@ -41,7 +41,7 @@ Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK
 
 ###
 GET http://localhost:5000/api/post/history/1
-Authorization: eyJhbGciOiJIUzI1NiJ9.aG9nZUBmdWdhLmNvbQ.S4V6rKlzA2s31-hsKPke3GjnK5bSssVLc72P604Abv8
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhvZ2VAZnVnYS5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTYxNjAzMzc2N30.H3pfFxzE2klN_dq-gRxVZzKZdrhlngaV7iKK3kJhzTs
 
 ###
 POST http://localhost:5000/api/register
