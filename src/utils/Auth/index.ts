@@ -9,7 +9,12 @@ const jwtOptions: jwt.SignOptions = {
   algorithm: 'HS256',
 }
 
-export function createToken(payload: string): string {
+type Payload = {
+  email: string;
+  userId: number;
+}
+
+export function createToken(payload: Payload): string {
   return jwt.sign(payload, jwtSecret, jwtOptions);
 }
 

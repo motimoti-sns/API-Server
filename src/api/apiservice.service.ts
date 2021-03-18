@@ -40,7 +40,11 @@ export class APIService {
     return succeeded;
   }
 
-  async signin(email: string, password: string): Promise<string> {
+  /**
+   * 
+   * 認証が通ればuser_idを返す
+   */
+  async signin(email: string, password: string): Promise<string | number> {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     try {
@@ -48,7 +52,7 @@ export class APIService {
       await queryRunner.release();
       if (user) {
         if (user.password === md5(password)) {
-          return 'success';
+          return user.id;
         } else {
           return 'invalid';
         }
